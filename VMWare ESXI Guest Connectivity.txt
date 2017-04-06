@@ -1,0 +1,29 @@
+Instructions for VMware ESXi Guest VM external connectivity
+April 14, 2015By Alex Fishman
+
+Please follow the instructions to enable ingress/egress connectivity to the VMs running on top of VMware ESXi™ in Ravello. The VMs must be defined with static IP configuration since the Ravello built-in DHCP server won’t work with nested VMs.
+
+    Add a second NIC to an ESXi host VM in Ravello UI . The second NIC would be used to create an uplink for a separate vSwitch on ESXi. Nested VMs will be connected to this vSwitch.
+    In Ravello UI define a subnet for nested VMs. For example if you wish to use subnet 20.0.0.x/24 put the following in the newly created NIC form:
+        IP address: 20.0.0.1
+        Subnet: 255.255.255.0
+        Gateway: 20.0.0.254
+
+    The IP address 20.0.0.1 can be used for the first nested guest VM running in the ESXi
+    For each additional VM press Advanced/Add and enter a different IP address from the same subnet and the identical gateway address as in step 2.
+    If you wish to provide ingress connectivity to a specific TCP/UDP port go to the Services tab and click on Add Supplied Service. Then fill in a port number and select the designated address of the VM (20.0.0.1 – for the example given in step 2.)
+    In ESXi create a new vSwitch of type “Virtual machine port group” and bind it to the second physical NIC created in step 1. VMs that need external connectivity must be wired to this vSwitch.
+    In a running nested VM: turn off a DHCP client and use static IP configuration instead. Type an IP address and router from step 2 and 3.:
+        Ifconfig eth0 20.0.0.1/24
+        ip route add –net 0 gw 20.0.0.254   or route add -net 0 gw 20.0.0.254
+
+    Now make sure you have egress connectivity by pinging an Internet address: ping 8.8.8.8. After that you can test ingress connectivity.
+
+
+ip route show
+
+
+https://www.ravellosystems.com/blog/guest-vm-connectivity-setup/
+
+
+https://www.cyberciti.biz/tips/configuring-static-routes-in-debian-or-red-hat-linux-systems.html
