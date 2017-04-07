@@ -1,0 +1,71 @@
+- IP ADDRESSING
+
+
+ip address add 10.0.0.101/16 dev ens192
+ip route add 10.0.0.101 via 10.0.0.1 dev ens192
+
+
+
+vi /etc/sysconfig/network-scripts/ifcfg-ens192
+
+
+DEVICE=ens192
+HWADDR=00:0c:29:84:6d:8c
+NM_CONTROLLED=no
+ONBOOT=yes
+IPADDR=10.0.0.101
+BOOTPROTO=none
+NETMASK=255.255.0.0
+DNS=10.0.0.1
+TYPE=Ethernet
+IPV6INIT=no
+USERCTL=no 
+
+
+- VMWARE Tools
+
+mount /dev/cdrom /mnt/cdrom
+cd /tmp
+rm -rf /tmp/vmware-tools-distrib
+ls /mnt/cdrom
+tar zxpf /mnt/cdrom/VMwareTools-4.0.0-xxxxxx.tar.gz
+umount /dev/cdrom
+cd vmware-tools-distrib
+./vmware-install.pl
+
+tar xzvf /mnt/cdrom/VMwareTools-x.x.x-xxxx.tar.gz -C /tmp/
+
+
+
+
+- REPO
+
+mount -o loop /dev/sr0  /mnt/cdrom
+
+
+# cp /mnt/cdrom/media.repo /etc/yum.repos.d/rhel7dvd.repo
+# chmod 644 /etc/yum.repos.d/rhel7dvd.repo
+
+
+enabled=1
+baseurl=file:///mnt/cdrom
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+
+
+
+[InstallMedia]
+name=DVD for Red Hat Enterprise Linux 7.1 Server
+mediaid=1359576196.686790
+metadata_expire=-1
+gpgcheck=1
+cost=500
+enabled=1
+baseurl=file:///mnt/
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+
+
+
+
+# yum clean all
+# subscription-manager clean
+
