@@ -69,3 +69,12 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
 # yum clean all
 # subscription-manager clean
 
+
+EPEL-RELEASE:
+Method1:  yum -y install epel-release
+Method2:
+cd /tmp
+wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+ls *.rpm
+sudo yum install epel-release-latest-7.noarch.rpm
+repolist
